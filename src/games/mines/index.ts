@@ -14,6 +14,8 @@ const LEVELS: Record<Level, { label: string; w: number; h: number; mines: number
 
 const FLAG =
   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 21V4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M7.5 4.5h10l-2.8 4 2.8 4h-10z" fill="var(--c-red)"/></svg>';
+const SHOVEL =
+  '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4l6 6"/><path d="M17 7l-7.5 7.5"/><path d="M11.5 12.5l-6 1.5-1.5 6 6-1.5 1.5-6"/></svg>';
 const MINE =
   '<svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3.5v17M3.5 12h17M6 6l12 12M18 6L6 18"/></g><circle cx="12" cy="12" r="5.5" fill="currentColor"/><circle cx="10" cy="10" r="1.6" fill="var(--surface)"/></svg>';
 
@@ -37,11 +39,10 @@ export default defineGame((ctx) => {
   const levelBtns = (Object.keys(LEVELS) as Level[]).map((l) =>
     h('button', { textContent: LEVELS[l].label, onclick: () => { level = l; storage.set('level', l); newGame(); } }),
   );
-  const digBtn = h('button', { textContent: 'Dig', onclick: () => setMode(false) });
-  const flagBtn = h('button', { textContent: 'Flag', onclick: () => setMode(true) });
-  const modeSeg = h('div', { class: 'segmented' }, digBtn, flagBtn);
+  // One button that flips what a tap does: dig ⇄ flag.
+  const modeBtn = h('button', { class: 'mines-mode', onclick: () => setMode(!flagMode) });
   const toolbar = h('div', { class: 'toolbar' }, h('div', { class: 'segmented' }, ...levelBtns));
-  if (ctx.isTouch) toolbar.append(modeSeg);
+  toolbar.append(modeBtn);
   const board = h('div', { class: 'mines-board' });
   const scroller = h('div', { class: 'mines-scroller' }, board);
   root.append(toolbar, scroller);
@@ -85,8 +86,11 @@ export default defineGame((ctx) => {
 
   function setMode(flag: boolean) {
     flagMode = flag;
-    digBtn.setAttribute('aria-pressed', String(!flag));
-    flagBtn.setAttribute('aria-pressed', String(flag));
+    modeBtn.innerHTML = flag ? FLAG : SHOVEL;
+    modeBtn.append(h('span', { textContent: flag ? 'Flagging' : 'Digging' }));
+    modeBtn.classList.toggle('flagging', flag);
+    modeBtn.setAttribute('aria-pressed', String(flag));
+    modeBtn.title = flag ? 'Taps place flags. Tap to switch to digging (M)' : 'Taps dig. Tap to switch to flagging (M)';
   }
 
   const sizeBoard = () => {
@@ -273,10 +277,9 @@ export default defineGame((ctx) => {
   gestures(
     board,
     {
-      tap: (p, e) => {
+      tap: (p) => {
         const i = cellAt(p.x, p.y);
         if (i < 0) return;
-        if (e.pointerType === 'mouse') return dig(i);
         if (flagMode) toggleFlag(i);
         else dig(i);
       },
@@ -323,6 +326,8 @@ export default defineGame((ctx) => {
       cells[cursor].el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     } else if ((e.code === 'Space' || e.key === 'Enter') && cursor >= 0) {
       dig(cursor);
+    } else if (e.key.toLowerCase() === 'm') {
+      setMode(!flagMode);
     } else if (e.key.toLowerCase() === 'f' && cursor >= 0) {
       toggleFlag(cursor);
     }

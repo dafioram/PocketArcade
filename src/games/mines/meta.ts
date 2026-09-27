@@ -12,12 +12,12 @@ export default defineMeta({
     touch: [
       'Tap a square to dig',
       'Long-press a square to plant or remove a flag',
-      'Switch the Dig / Flag toggle to swap what tap and long-press do',
+      'Tap the Digging / Flagging button to switch what a tap does (long-press always does the other one)',
       'Tap a number whose mines are all flagged to clear around it',
       'Drag to scroll on the big board',
     ],
     keyboard: [
-      'Click to dig, right-click to flag',
+      'Click to dig, right-click to flag (or use the Digging / Flagging button, M)',
       'Click a number to clear around it when its flags are placed',
       'Or use arrow keys to move, Space to dig, F to flag',
     ],

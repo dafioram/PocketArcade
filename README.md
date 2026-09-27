@@ -5,13 +5,14 @@ A small collection of classic games in one static web app. Every game plays with
 | Game | Type | Phone controls |
 | --- | --- | --- |
 | Snake | Arcade | Swipe to turn. Keep your finger down and swipe again to turn twice. |
+| Blockfall | Arcade | Tap in line with the piece to rotate, left or right of it to move one space. Press and hold the piece and slide to steer it. Swipe down to drop, swipe up to rotate the other way. |
 | Bricks | Arcade | Drag anywhere to slide the paddle, tap to launch. |
 | Invaders | Arcade | Press and drag to move. Holding your finger down keeps firing. |
 | Downhill | Arcade | Drag and the skier steers toward your finger. Let go to point downhill. Double-tap to jump. |
 | Meteors | Arcade | Simplified touch mode: the ship stays in the middle. Hold to aim and fire. Double-tap for a shield burst. |
 | 2048 | Puzzle | Swipe. Undo button. |
 | Sudoku | Puzzle | Tap a square, then a number. Long-press a number to add it as a note. |
-| Mines | Puzzle | Tap to dig, long-press to flag. A Dig / Flag toggle swaps the two. |
+| Mines | Puzzle | Tap to dig, long-press to flag. One Digging / Flagging button switches what a tap does. |
 
 Built with Vite and TypeScript. There are no runtime dependencies.
 
@@ -71,7 +72,7 @@ A game can return `{ pause, resume, isPaused, destroy }`. If it has `pause`, the
 
 - Put `touch-action: none` on anything you drag. `.stage` already has it.
 - Prefer relative drags, where the object moves by the finger's movement, over "follow the finger". That keeps the player's thumb from covering what they control. Bricks and Invaders work this way.
-- Always offer a tap alternative to long-press and double-tap. Mines has its Dig / Flag toggle, and Sudoku has its Notes button.
+- Always offer a tap alternative to long-press and double-tap. Mines has its Digging / Flagging button, and Sudoku has its Notes button.
 
 ## Project layout
 

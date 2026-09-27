@@ -87,3 +87,32 @@
 .mc[data-n='6'] { color: var(--c-teal); }
 .mc[data-n='7'] { color: var(--text); }
 .mc[data-n='8'] { color: var(--muted); }
+
+.mines-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 42px;
+  min-width: 124px;
+  padding: 0 14px;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 650;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.08s;
+}
+.mines-mode:active {
+  transform: scale(0.96);
+}
+.mines-mode svg {
+  width: 20px;
+  height: 20px;
+}
+.mines-mode.flagging {
+  border-color: var(--c-red);
+  background: color-mix(in srgb, var(--c-red) 14%, var(--surface));
+}
