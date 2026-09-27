@@ -5,7 +5,7 @@ A small collection of classic games in one static web app. Every game plays with
 | Game | Type | Phone controls |
 | --- | --- | --- |
 | Snake | Arcade | Swipe to turn. Keep your finger down and swipe again to turn twice. |
-| Blockfall | Arcade | Tap in line with the piece to rotate, left or right of it to move one space. Press and hold the piece and slide to steer it. Swipe down to drop, swipe up to rotate the other way. |
+| Blockfall | Arcade | Tap in line with the piece to rotate, left or right of it to move one space. Press and hold the piece and slide to steer it, or swipe left/right anywhere to slide it as far as you swipe. Swipe down or double-tap to drop, swipe up to rotate the other way. |
 | Bricks | Arcade | Drag anywhere to slide the paddle, tap to launch. |
 | Invaders | Arcade | Press and drag to move. Holding your finger down keeps firing. |
 | Downhill | Arcade | Drag and the skier steers toward your finger. Let go to point downhill. Double-tap to jump. |

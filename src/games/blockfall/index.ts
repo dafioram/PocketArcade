@@ -361,12 +361,19 @@ export default defineGame((ctx) => {
 
   // ---------- Touch controls ----------
   // tap in line with the piece → rotate · tap left/right of it → move one column
-  // press on the piece and slide → steer it · swipe down → drop · swipe up → rotate back
+  // press on the piece and slide → it follows your finger
+  // swipe left/right anywhere → it slides as far as you swipe
+  // swipe down or double-tap anywhere → drop · swipe up → rotate back
   const colAt = (x: number) => Math.floor(x / CELL);
+  const SWIPE_GAIN = 1.25; // off-piece swipes: columns moved per column of finger travel
+  const DOUBLE_TAP_MS = 280;
   let pressOnPiece = false;
   let grabOffset = 0;
   let pressAt: Point = { x: 0, y: 0 };
+  let pieceXAtPress = 0;
   let steered = false;
+  /** The last tap, so a second quick tap can undo it and drop instead. */
+  let lastTap: { t: number; at: Point; piece: Piece; m: number[][]; x: number } | null = null;
 
   const onPiece = (p: Point) => {
     const cs = cells(piece);
@@ -381,8 +388,7 @@ export default defineGame((ctx) => {
     );
   };
 
-  const steerTo = (x: number) => {
-    const target = colAt(x) - grabOffset;
+  const moveTo = (target: number) => {
     while (piece.x < target && shift(1));
     while (piece.x > target && shift(-1));
   };
@@ -395,16 +401,22 @@ export default defineGame((ctx) => {
         steered = false;
         pressOnPiece = phase === 'playing' && onPiece(p);
         grabOffset = colAt(p.x) - piece.x;
+        pieceXAtPress = piece.x;
       },
       move: (p, info) => {
-        if (!pressOnPiece || phase !== 'playing') return;
+        if (phase !== 'playing') return;
         const dx = Math.abs(info.total.x);
         const dy = Math.abs(info.total.y);
         // Start steering once the finger moves sideways more than it moves vertically.
         if (!steered && dx > CELL * 0.35 && dx > dy * 0.8) steered = true;
-        if (steered) {
-          grabbed = true;
-          steerTo(p.x);
+        if (!steered) return;
+        grabbed = true;
+        if (pressOnPiece) {
+          // Holding the piece: it sits under your finger.
+          moveTo(colAt(p.x) - grabOffset);
+        } else {
+          // Swiping elsewhere: it moves by how far you swipe.
+          moveTo(pieceXAtPress + Math.round((info.total.x / CELL) * SWIPE_GAIN));
         }
       },
       release: (p, info) => {
@@ -415,7 +427,8 @@ export default defineGame((ctx) => {
         const dx = p.x - pressAt.x;
         const dy = p.y - pressAt.y;
         if (info.moved) {
-          // Swipes (measured in game units; a cell is ~30).
+          lastTap = null;
+          // Vertical swipes (measured in game units; a cell is 30).
           if (Math.abs(dy) > CELL * 1.2 && Math.abs(dy) > Math.abs(dx) * 1.2 && info.duration < 700) {
             if (dy > 0) hardDrop();
             else rotate(-1);
@@ -423,6 +436,20 @@ export default defineGame((ctx) => {
           return;
         }
         if (info.duration > 350) return; // a hold that never moved
+
+        const now = performance.now();
+        if (lastTap && now - lastTap.t < DOUBLE_TAP_MS && Math.hypot(p.x - lastTap.at.x, p.y - lastTap.at.y) < CELL * 1.5) {
+          // Double tap: take back what the first tap did, then drop.
+          if (lastTap.piece === piece && !collides(lastTap.m, lastTap.x, piece.y)) {
+            piece.m = lastTap.m;
+            piece.x = lastTap.x;
+          }
+          lastTap = null;
+          hardDrop();
+          return;
+        }
+        lastTap = { t: now, at: p, piece, m: piece.m, x: piece.x };
+
         const xs = cells(piece).map(([x]) => x);
         const col = colAt(p.x);
         if (col < Math.min(...xs)) shift(-1);

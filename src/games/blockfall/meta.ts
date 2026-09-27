@@ -12,7 +12,8 @@ export default defineMeta({
       'Tap above or below the piece (in line with it) to rotate it clockwise',
       'Tap left of the piece to move it one space left, right of it to move one space right',
       'Press and hold on the piece, then slide your finger to steer it while it keeps falling',
-      'Swipe down to drop it straight down',
+      'Swipe left or right anywhere to slide the piece: a short swipe moves it a little, a long swipe moves it all the way',
+      'Swipe down or double-tap anywhere to drop it straight down',
       'Swipe up to rotate it the other way',
     ],
     keyboard: [
