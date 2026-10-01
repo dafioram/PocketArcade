@@ -14,6 +14,10 @@ export interface OverlayOptions {
   onTap?: () => void;
   /** Small hint under the card, e.g. "Tap to start". */
   hint?: string;
+  /** Extra content placed under the body text (e.g. an illustrated legend). */
+  content?: HTMLElement;
+  /** A wider card for richer content. */
+  wide?: boolean;
 }
 
 export interface Overlay {
@@ -73,9 +77,10 @@ export function createOverlay(root: HTMLElement, signal: AbortSignal): Overlay {
       el.replaceChildren(
         h(
           'div',
-          { class: 'overlay-card' },
+          { class: opts.wide ? 'overlay-card overlay-wide' : 'overlay-card' },
           h('h2', { textContent: opts.title }),
           opts.body ? h('p', { textContent: opts.body }) : null,
+          opts.content ?? null,
           opts.actions?.length
             ? h(
                 'div',
