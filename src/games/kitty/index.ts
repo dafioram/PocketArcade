@@ -256,7 +256,7 @@ export default defineGame((ctx) => {
     resetActors();
     S.phase = 'ready';
     S.phaseTime = 0;
-    S.readyDur = 1.8;
+    S.readyDur = 2;
     updateHud();
     drawTray();
   };
@@ -270,7 +270,8 @@ export default defineGame((ctx) => {
     S.popups = [];
     S.paused = false;
     startLevel();
-    S.readyDur = Math.max(2, Snd.jingle() + 0.2);
+    Snd.jingle();
+    S.readyDur = 3; // 3, 2, 1 while the opening tune plays
     overlay.hide();
   };
 
@@ -594,7 +595,7 @@ export default defineGame((ctx) => {
           resetActors();
           S.phase = 'ready';
           S.phaseTime = 0;
-          S.readyDur = 1.6;
+          S.readyDur = 2;
           drawTray();
         }
       }
@@ -786,10 +787,28 @@ export default defineGame((ctx) => {
     }
     g.globalAlpha = 1;
 
-    if (S.phase === 'ready' && !S.paused) {
-      g.font = `800 ${Math.round(T * 0.9)}px ${FONT}`;
+    // Countdown while everyone waits to start: 3… 2… 1… then a quick "Go!"
+    const cx = (BONUS_SPOT.x + 0.5) * T;
+    const cy = (BONUS_SPOT.y + 0.55) * T;
+    if (S.phase === 'ready') {
+      const left = Math.max(0, S.readyDur - S.phaseTime);
+      const n = Math.max(1, Math.ceil(left));
+      const frac = left - Math.floor(left); // 1 → 0 within each second
+      const pop = S.paused ? 1 : 1 + 0.35 * Math.max(0, frac - 0.7) / 0.3;
+      g.save();
+      g.translate(cx, cy);
+      g.scale(pop, pop);
+      g.globalAlpha = S.paused ? 1 : 0.35 + 0.65 * Math.min(1, frac / 0.25 + (frac === 0 ? 1 : 0));
+      g.font = `800 ${Math.round(T * 1.25)}px ${FONT}`;
       g.fillStyle = C.ready;
-      g.fillText('READY!', (BONUS_SPOT.x + 0.5) * T, (BONUS_SPOT.y + 0.55) * T);
+      g.fillText(String(n), 0, 0);
+      g.restore();
+    } else if (S.phase === 'play' && S.phaseTime < 0.6) {
+      g.globalAlpha = 1 - S.phaseTime / 0.6;
+      g.font = `800 ${Math.round(T * 1.1)}px ${FONT}`;
+      g.fillStyle = C.ready;
+      g.fillText('Go!', cx, cy - S.phaseTime * T);
+      g.globalAlpha = 1;
     }
   };
 

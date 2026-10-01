@@ -13,6 +13,7 @@ export default defineMeta({
       'Hold off at an angle and she uses the second direction to round corners; slide your finger to re-aim',
       'Quick flicks work as swipes, and the on-screen d-pad works too (hide it with the d-pad button under the maze)',
       'Treats 10 · Catnip 50 and scares the dogs · Scared dogs 200, 400, 800, 1600 · Goodies 100 to 5000',
+      'Each round starts with a short countdown',
       'Extra life at 10,000 points',
     ],
     keyboard: [
