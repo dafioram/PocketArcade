@@ -2,6 +2,10 @@
 
 A small collection of classic games in one static web app. Every game plays with a keyboard on desktop and with touch gestures on a phone.
 
+**▶ [Play now at dafioram.github.io/PocketArcade](https://dafioram.github.io/PocketArcade/)**
+
+On a phone, use your browser's "Add to Home Screen" to open it like an app.
+
 | Game | Type | Phone controls |
 | --- | --- | --- |
 | Snake | Arcade | Swipe to turn. Keep your finger down and swipe again to turn twice. |
@@ -32,7 +36,7 @@ To try it on your phone, run `npm run dev -- --host` and open the "Network" URL 
 
 1. Create a GitHub repository and push this project to its `main` branch.
 2. In the repo, go to **Settings → Pages** and set **Source** to **GitHub Actions**.
-3. Every push to `main` then builds and deploys the site through `.github/workflows/deploy.yml`. The site appears at `https://<you>.github.io/<repo>/`.
+3. Every push to `main` then builds and deploys the site through `.github/workflows/deploy.yml`. This copy is published at https://dafioram.github.io/PocketArcade/ (in general, `https://<user>.github.io/<repo>/`).
 
 The build uses relative paths and hash routing (`#/play/snake`). It works from any sub-path, so you don't need to configure a base URL.
 
