@@ -10,6 +10,7 @@ A small collection of classic games in one static web app. Every game plays with
 | Invaders | Arcade | Press and drag to move. Holding your finger down keeps firing. |
 | Downhill | Arcade | Drag and the skier steers toward your finger. Let go to point downhill. Double-tap to jump. |
 | Meteors | Arcade | Simplified touch mode: the ship stays in the middle. Hold to aim and fire. Double-tap for a shield burst. |
+| Rooftop Runner | Arcade | Tap, hold or swipe up to jump. Swipe down to duck (keep holding to stay down; in the air it drops you faster). |
 | Tower | Arcade | Touch a plane and drag to draw its route. Land it in a green circle at the end of a matching runway. |
 | 2048 | Puzzle | Swipe. Undo button. |
 | Sudoku | Puzzle | Tap a square, then a number. Long-press a number to add it as a note. |
